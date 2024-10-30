@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 import csv
 import math
-from typing import List, Tuple
+from typing import List, Tuple, TypedDict
+
+
+class HypermediaPagination(TypedDict):
+    page_size: int
+    page: int
+    data: List[List]
+    next_page: int
+    prev_page: int
+    total_pages: int
 
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
@@ -42,3 +51,13 @@ class Server:
         if start > len(data):
             return []
         return data[start:end]
+
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> HypermediaPagination:
+        return {
+        "page_size": page_size,
+        "page": page,
+        "data": self.get_page(page, page_size),  # Populate with actual data
+        "next_page": page + 1,
+        "prev_page": page - 1 if page > 1 else None,
+        "total_pages": 100,  # Example total pages value
+        }
